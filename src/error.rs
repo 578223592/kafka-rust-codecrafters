@@ -1,16 +1,16 @@
 use std::fmt::Display;
 
-pub(crate) struct Error {
+pub(crate) struct KafkaError {
     message: String,
 }
 
-impl Error {
+impl KafkaError {
     pub(crate) fn new(message: String) -> Self {
-        Error { message }
+        KafkaError { message }
     }
 }
 
-impl Display for Error {
+impl Display for KafkaError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         return f.write_str(&self.message);
     }

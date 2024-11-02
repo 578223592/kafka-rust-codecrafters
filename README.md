@@ -34,10 +34,5 @@ Note: This section is for stages 2 and beyond.
 1. Commit your changes and run `git push origin master` to submit your solution
    to CodeCrafters. Test output will be streamed to your terminal.
 
-
-
-
-
-   todo：
-
-   1. 同时上传到github仓库
+进度记录：
+2024-11-3 01:13:44：<https://app.codecrafters.io/courses/kafka/stages/nc5> 开始准备挑战

@@ -5,26 +5,25 @@ pub(crate) struct ResponseBuilder {
 }
 
 impl ResponseBuilder {
-    pub fn new() -> ResponseBuilder {
+    pub fn new(correlation_id: i32) -> ResponseBuilder {
         ResponseBuilder {
             message_size: 0,
             header: Header {
                 // request_api_key,
                 // request_api_version => INT16
-                correlation_id: 7,
+                correlation_id,
             },
             body: Body {},
         }
     }
 
-    pub fn as_bytes(&self) -> Vec<u8> {
+    pub fn build_response(&self) -> Vec<u8> {
         let mut bytes: Vec<u8> = self.message_size.to_be_bytes().to_vec();
         bytes.append(&mut self.header.to_bytes());
         // bytes.append(&mut self.body.to_bytes());
         return bytes;
     }
 }
-
 
 pub(crate) struct Header {
     // request_api_key: i16,

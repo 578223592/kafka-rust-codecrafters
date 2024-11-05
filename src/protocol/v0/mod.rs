@@ -1,23 +1,53 @@
-pub(crate) struct ResponseBuilder {
+use super::ResponseWorker;
+
+
+
+
+
+pub(crate) struct ApiVersionsWorker {
+    // message_size: i32,
+    // header: Header,
+    // body: Body,
+}
+
+impl ResponseWorker for ApiVersionsWorker {
+    fn new(requset_parser: super::v2::RequsetParserV2) -> Self {
+        todo!()
+    }
+
+    fn build_response(&self) -> Vec<u8> {
+        todo!()
+    }
+}
+
+
+pub(crate) struct CommonResponseBuilder {
     message_size: i32,
     header: Header,
     body: Body,
 }
 
-impl ResponseBuilder {
-    pub fn new(correlation_id: i32) -> ResponseBuilder {
-        ResponseBuilder {
+impl ResponseWorker for CommonResponseBuilder {
+     fn new(requset_parser: super::v2::RequsetParserV2) -> CommonResponseBuilder {
+        match requset_parser.get_request_api_key() {
+            0 => {}
+            _ => panic!("Invalid correlation id"),
+        }
+
+
+        CommonResponseBuilder {
             message_size: 0,
             header: Header {
                 // request_api_key,
                 // request_api_version => INT16
-                correlation_id,
+                
+                correlation_id: requset_parser.get_correlation_id(),
             },
             body: Body {},
         }
     }
 
-    pub fn build_response(&self) -> Vec<u8> {
+    fn build_response(&self) -> Vec<u8> {
         let mut bytes: Vec<u8> = self.message_size.to_be_bytes().to_vec();
         bytes.append(&mut self.header.to_bytes());
         // bytes.append(&mut self.body.to_bytes());

@@ -1,4 +1,4 @@
-use crate::protocol::v2::RequsetParserV2;
+use crate::protocol::{ResponseWorker, v2::RequsetParserV2};
 use std::{
     io::{Read, Write},
     vec,
@@ -6,7 +6,7 @@ use std::{
 
 use crate::{
     error::KafkaError,
-    protocol::{v0::ResponseBuilder, v2::RequsetHeaderParserV2},
+    protocol::{v0::CommonResponseBuilder, v2::RequsetHeaderParserV2},
 };
 
 pub(crate) struct Responeser {
@@ -25,9 +25,13 @@ impl Responeser {
             //由于没有设置read timeout，所以这里会阻塞，直到有数据可读
             return Err(KafkaError::Connetion);
         }
-        let requset_parser_v2 = RequsetParserV2::new(&mut Vec::from(buf))?;
+        let mut requset_parser_v2: RequsetParserV2 = RequsetParserV2::new(&mut Vec::from(buf))?;
         dbg!(requset_parser_v2.clone());
-        let response_builder = ResponseBuilder::new(requset_parser_v2.get_correlation_id());
+
+        requset_parser_v2.validate();
+
+
+        let response_builder = ResponseWorker::new(requset_parser_v2);
         let response_ = response_builder.build_response();
         if let Err(_) = self.send_response(response_) {
             //考虑包装这个ioError

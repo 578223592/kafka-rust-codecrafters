@@ -1,8 +1,6 @@
-use std::fmt::Display;
+use std::{clone, fmt::Display};
 
-
-
-#[derive(thiserror::Error, Debug)]
+#[derive(thiserror::Error, Debug,Clone)]
 pub enum KafkaError {
     // #[error("data store disconnected")]
     // Disconnect(#[from] io::Error),
@@ -19,6 +17,29 @@ pub enum KafkaError {
     ParseRequest(String),
     #[error("net error , example:read write error")]
     Connetion,
+    // UNSUPPORTED_VERSION	35
+    #[error("unsupported version")]
+    UnsupportedVersion,
+}
+
+impl KafkaError {
+    pub fn getErrorCode(&self) -> i32 {
+        match self {
+            KafkaError::Base => {
+                todo!();
+                return 0;
+            }
+            KafkaError::ParseRequest(_) => {
+                todo!();
+                return 0;
+            }
+            KafkaError::Connetion => {
+                todo!();
+                return 0;
+            }
+            KafkaError::UnsupportedVersion => 35,
+        }
+    }
 }
 
 // pub(crate) struct KafkaError {

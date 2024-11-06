@@ -5,15 +5,15 @@ pub mod v2; // Protocol Version 2
 
 // 不同response的trait
 pub(crate) trait ResponseWorker {
-    fn new(requset_parser: v2::RequsetParserV2) -> Self; //todo 待把requset_parser抽象成trait
-    fn build_response(&self) -> Vec<u8>;
+    fn new(requset_parser: v2::RequsetParserV2) -> Self where Self: Sized; //todo 待把requset_parser抽象成trait
+    fn build_response(&mut self) -> Vec<u8>;
 }
 
 
 
 pub fn response_worker_factory(requset_parser: v2::RequsetParserV2) -> Box<dyn ResponseWorker> {
     match requset_parser.get_request_api_key() {
-        0 => Box::new(v0::ApiVersionsWorker::new(requset_parser)),
+        18 => Box::new(v0::ApiVersionsWorker::new(requset_parser)),
         _ => panic!("Unsupported request api key"),
     } 
 }

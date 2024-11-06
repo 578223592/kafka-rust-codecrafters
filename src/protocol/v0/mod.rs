@@ -5,20 +5,56 @@ use super::ResponseWorker;
 
 
 pub(crate) struct ApiVersionsWorker {
-    // message_size: i32,
-    // header: Header,
-    // body: Body,
+    message_size: i32, //目前先给0 占位
+    request_api_version: i16,
+    header: Header, //
+    body: ApiVersionBody,  // error_code [api_keys] 
 }
 
 impl ResponseWorker for ApiVersionsWorker {
     fn new(requset_parser: super::v2::RequsetParserV2) -> Self {
-        todo!()
+        return ApiVersionsWorker {
+            message_size: 0,
+            request_api_version: requset_parser.get_request_api_version(),
+            header: Header {
+                // request_api_key,
+                // request_api_version => INT16
+                
+                correlation_id: requset_parser.get_correlation_id(),
+            },
+            body: ApiVersionBody{
+                error_code: 0,
+            },
+        }
     }
 
-    fn build_response(&self) -> Vec<u8> {
-        todo!()
+    fn build_response(&mut self) -> Vec<u8> {
+        //判断
+        if !(self.request_api_version<=4 && self.request_api_version>=0) {
+            self.body.error_code = 35;
+        }
+
+        let mut bytes: Vec<u8> = self.message_size.to_be_bytes().to_vec();
+        bytes.append(&mut self.header.to_bytes());
+        bytes.append(&mut self.body.to_bytes());
+        return bytes;
     }
 }
+
+pub(crate) struct ApiVersionHeader {
+    error_code: i16,
+}
+
+struct ApiVersionBody {
+    error_code: i16,
+    // api_keys: Vec<ApiVersionApiKey>, //
+}
+impl ApiVersionBody {
+    fn to_bytes(&self) ->  Vec<u8> {
+        return self.error_code.to_be_bytes().to_vec();
+    }
+}
+
 
 
 pub(crate) struct CommonResponseBuilder {
@@ -47,7 +83,7 @@ impl ResponseWorker for CommonResponseBuilder {
         }
     }
 
-    fn build_response(&self) -> Vec<u8> {
+    fn build_response(&mut self) -> Vec<u8> {
         let mut bytes: Vec<u8> = self.message_size.to_be_bytes().to_vec();
         bytes.append(&mut self.header.to_bytes());
         // bytes.append(&mut self.body.to_bytes());

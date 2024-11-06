@@ -19,7 +19,7 @@ impl RequsetParserV2 {
             .map_err(|err: KafkaError| KafkaError::ParseRequest(err.to_string()))?;
 
         return Ok(RequsetParserV2 {
-            message_size: 1,
+            message_size: i32::from_be_bytes(message_size_bytes),
             header,
             body: vec![1],
             request_err: None,
@@ -29,20 +29,25 @@ impl RequsetParserV2 {
         return self.header.request_api_key
     }
 
+
+    pub(crate) fn get_request_api_version(&self) -> i16 {
+        return self.header.request_api_version
+    }
+
     pub(crate) fn get_correlation_id(&self) -> i32 {
         return self.header.correlation_id;
     }
     
-    pub(crate) fn validate(&mut self)  {
-        // only check the request_api_version
-        if self.header.request_api_version == 18 {
-            if self.header.request_api_version>4{
-                self.request_err = Some(KafkaError::UnsupportedVersion)
-            }
+    // pub(crate) fn validate(&mut self)  {
+    //     // only check the request_api_version
+    //     if self.header.request_api_version == 18 {
+    //         if self.header.request_api_version>4{
+    //             self.request_err = Some(KafkaError::UnsupportedVersion)
+    //         }
         
-        }
+    //     }
 
-    }
+    // }
 }
 
 #[derive(Debug, Clone)]

@@ -1,4 +1,4 @@
-use crate::protocol::{ResponseWorker, v2::RequsetParserV2};
+use crate::protocol::{response_worker_factory, v2::RequsetParserV2, ResponseWorker};
 use std::{
     io::{Read, Write},
     vec,
@@ -28,10 +28,10 @@ impl Responeser {
         let mut requset_parser_v2: RequsetParserV2 = RequsetParserV2::new(&mut Vec::from(buf))?;
         dbg!(requset_parser_v2.clone());
 
-        requset_parser_v2.validate();
+        // requset_parser_v2.validate(); //valide能力应该放到ResponseWorker里面
 
 
-        let response_builder = ResponseWorker::new(requset_parser_v2);
+        let mut response_builder = response_worker_factory(requset_parser_v2);
         let response_ = response_builder.build_response();
         if let Err(_) = self.send_response(response_) {
             //考虑包装这个ioError

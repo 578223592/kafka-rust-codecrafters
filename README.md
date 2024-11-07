@@ -39,6 +39,6 @@ Note: This section is for stages 2 and beyond.
    to CodeCrafters. Test output will be streamed to your terminal.
 
 进度记录：
-2024-11-3 01:13:44：<https://app.codecrafters.io/courses/kafka/stages/nc5> 开始准备挑战 
-2024年11月6日00:43:01 trait实例化报错，待研究：https://kaisery.github.io/trpl-zh-cn/ch10-02-traits.html 、 https://rust.bootcss.com/ch17-02-trait-objects.html 相关内容
+2024-11-8 00:54:57 目前完成了基础部分，准备开始并发，需要用到tokie，因此需要先学习一波
+https://app.codecrafters.io/courses/kafka/stages/nh4
 -->

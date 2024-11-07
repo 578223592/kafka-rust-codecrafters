@@ -1,7 +1,7 @@
 use std::vec;
 
 use super::ResponseWorker;
-
+use crate::responser::TAG_BUFFER;
 pub(crate) struct ApiVersionsWorker {
     message_size: i32, //It specifies the size of the header and body
     request_api_version: i16,
@@ -60,11 +60,18 @@ struct ApiVersionBody {
 impl ApiVersionBody {
     fn to_bytes(&self) -> Vec<u8> {
         let mut bytes = self.error_code.to_be_bytes().to_vec();
+        // (self.api_keys.len()+1)转成i8
+         ;
+
+        bytes.append(&mut ((self.api_keys.len()+1) as i8).to_be_bytes().to_vec()); // num api key records + 1 ； 不知道为啥，但是大家都是这么写的
         // 迭代器遍历self.api_keys
         for api_key in self.api_keys.iter() {
             bytes.append(&mut api_key.to_bytes());
         }
-        bytes.append(&mut self.throttle_time_ms.to_be_bytes().to_vec());
+
+        bytes.append(&mut TAG_BUFFER.to_be_bytes().to_vec()); //同样不知道为啥
+        bytes.append(&mut self.throttle_time_ms.to_be_bytes().to_vec()); 
+        bytes.append(&mut TAG_BUFFER.to_be_bytes().to_vec()); //同样不知道为啥
 
         return bytes;
     }

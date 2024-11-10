@@ -40,5 +40,6 @@ Note: This section is for stages 2 and beyond.
 
 进度记录：
 2024-11-8 00:54:57 目前完成了基础部分，准备开始并发，需要用到tokie，因此需要先学习一波
-https://app.codecrafters.io/courses/kafka/stages/nh4
+发现rust圣经中有不少只是，因此恶补一下rust高级进阶中的内容：
+2024年11月11日00:42:23：目前看到了:https://course.rs/advance-practice/overview.html 准备开始，而这里正好是tokie的开始
 -->

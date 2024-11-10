@@ -1,7 +1,7 @@
 #![allow(unused_imports)]
 mod error;
-mod responser;
 mod protocol;
+mod responser;
 
 use std::net::TcpListener;
 

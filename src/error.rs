@@ -23,7 +23,7 @@ pub enum KafkaError {
 }
 
 impl KafkaError {
-    pub fn getErrorCode(&self) -> i32 {
+    pub fn get_error_code(&self) -> i32 {
         match self {
             KafkaError::Base => {
                 todo!();
